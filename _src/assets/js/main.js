@@ -30,15 +30,33 @@ function paintResults() {
     list.innerHTML += '<div>';
     list.innerHTML += `<li> ${searchResults[i].show.name}</li>`;
     if (searchResults[i].show.image === null) {
-      list.innerHTML += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}">`;
+      list.innerHTML += `<img class="card--normal js-card" src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}">`;
     } else {
-      list.innerHTML += `<img src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}">`;
+      list.innerHTML += `<img class="card--normal js-card" src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}">`;
     }
     list.innerHTML += '</div>';
   }
+  listenCards();
 }
 
 //Escucho al botón
 btn.addEventListener('click', handlebtn);
 
-// escucho tarjeta (temporalmete imagen porque no me genera el div)
+//Favs
+
+//Escucho las tarjetas
+function listenCards() {
+  // Recojo tarjeta (temporalmete imagen porque no me genera el div)
+  const cards = document.querySelectorAll('.js-card');
+
+  // Escucho tarjeta (temporalmete imagen porque no me genera el div)
+  for (const card of cards) {
+    card.addEventListener('click', handleCard);
+  }
+}
+
+// //Handle de la tarjeta
+function handleCard() {
+  console.log('me han clickado');
+  //   paintFavs();
+}
