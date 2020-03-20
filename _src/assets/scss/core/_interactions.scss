@@ -1,8 +1,10 @@
 .card {
   &--normal {
-    border: solid 5px hotpink;
+    background-color: hotpink;
+    margin: 5px;
+    display: inline-block;
   }
   &--fav {
-    border: solid 5px red;
+    background-color: red;
   }
 }

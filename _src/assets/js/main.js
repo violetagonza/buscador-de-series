@@ -26,16 +26,16 @@ function getData() {
 function paintResults() {
   const list = document.querySelector('.js-list');
   list.innerHTML = '';
+  let HTMLcode = '';
   for (let i = 0; i < searchResults.length; i++) {
-    list.innerHTML += '<div>';
-    list.innerHTML += `<li> ${searchResults[i].show.name}</li>`;
+    HTMLcode += `<li class="card--normal js-card"> ${searchResults[i].show.name}`;
     if (searchResults[i].show.image === null) {
-      list.innerHTML += `<img class="card--normal js-card" src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}">`;
+      HTMLcode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
     } else {
-      list.innerHTML += `<img class="card--normal js-card" src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}">`;
+      HTMLcode += `<img src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}"></li>`;
     }
-    list.innerHTML += '</div>';
   }
+  list.innerHTML = HTMLcode;
   listenCards();
 }
 
