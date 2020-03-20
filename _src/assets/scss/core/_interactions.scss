@@ -1,10 +1,14 @@
 .card {
   &--normal {
     background-color: hotpink;
+    color: rgb(63, 107, 100);
     margin: 5px;
     display: inline-block;
   }
   &--fav {
     background-color: red;
+    color: white;
+    margin: 5px;
+    display: inline-block;
   }
 }
