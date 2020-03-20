@@ -28,7 +28,7 @@ function paintResults() {
   list.innerHTML = '';
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
-    HTMLSearchcode += `<li class="card--normal js-card"> ${searchResults[i].show.name}`;
+    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="card--normal js-card"> ${searchResults[i].show.name}`;
     if (searchResults[i].show.image === null) {
       HTMLSearchcode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
     } else {
@@ -37,7 +37,6 @@ function paintResults() {
   }
   list.innerHTML = HTMLSearchcode;
   listenCards();
-  console.log(searchResults);
 }
 
 //Escucho al botón
@@ -47,6 +46,7 @@ btn.addEventListener('click', handlebtn);
 
 //Creo array para favs
 let favs = [];
+
 //Añado al array el clickado
 function addShowToFavs() {
   favs.push(searchResults[0]);
@@ -57,7 +57,7 @@ function paintFavs() {
   let HTMLFavsCode;
   HTMLFavsCode = `<li>${favs[0].show.name}`;
   if (favs[0].show.image === null) {
-    HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
+    HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${favs[0].show.name}"></li>`;
   } else {
     HTMLFavsCode += `<img src="${favs[0].show.image.medium}" alt="${favs[0].show.name}"></li>`;
   }
@@ -74,9 +74,27 @@ function handleCard(ev) {
     ev.currentTarget.classList.remove('card--fav');
     ev.currentTarget.classList.add('card--normal');
   }
-  addShowToFavs();
-  paintFavs();
-  console.log('me han clickado');
+  //Encuento id de tarjeta clickada
+  const clickedID = ev.target.id;
+  console.log(clickedID);
+  // Cojo la serie del producto clickado
+  let foundShow = findShowforFavs(clickedID, searchResults);
+  favs.push({
+    id: foundShow.show.id,
+    name: foundShow.show.name,
+    imgulr: ''
+  });
+  for (let i = 0; i < favs.length; i++) {
+    if (foundShow.show.image === null) {
+      favs[i].imgurl = 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV';
+    } else {
+      favs[i].imgurl = foundShow.show.image.medium;
+    }
+  }
+
+  console.log(foundShow);
+
+  console.log(favs);
 }
 
 //Escucho las tarjetas
@@ -87,4 +105,13 @@ function listenCards() {
   for (const card of cards) {
     card.addEventListener('click', handleCard);
   }
+}
+//Función que busca la serie dentro del array mediante su ID
+function findShowforFavs(ID, array) {
+  for (const object of array) {
+    if (object.show.id === parseInt(ID)) {
+      return object;
+    }
+  }
+  return undefined;
 }
