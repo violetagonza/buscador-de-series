@@ -51,11 +51,11 @@ function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
   let HTMLFavsCode = '';
   for (let i = 0; i < favs.length; i++) {
-    HTMLFavsCode += `<li><p class="aside--list__text">${favs[i].name}</p>`;
+    HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p> <i class="aside--list__icon fas fa-trash-alt"></i></div>`;
     //   if (favs[i].imgurl === null) {
     //     HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${favs[i].name}"></li>`;
     //   } else {
-    HTMLFavsCode += `<img src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
+    HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
     //   }
   }
   favList.innerHTML = HTMLFavsCode;
