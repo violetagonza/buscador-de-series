@@ -28,7 +28,7 @@ function paintResults() {
   list.innerHTML = '';
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
-    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="card--normal js-card"> ${searchResults[i].show.name}`;
+    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p class="main--list__text">${searchResults[i].show.name}</p>`;
     if (searchResults[i].show.image === null) {
       HTMLSearchcode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
     } else {
@@ -51,7 +51,7 @@ function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
   let HTMLFavsCode = '';
   for (let i = 0; i < favs.length; i++) {
-    HTMLFavsCode += `<li>${favs[i].name}`;
+    HTMLFavsCode += `<li><p class="aside--list__text">${favs[i].name}</p>`;
     //   if (favs[i].imgurl === null) {
     //     HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${favs[i].name}"></li>`;
     //   } else {

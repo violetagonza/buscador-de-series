@@ -8,21 +8,27 @@
   </head>
 
   <body>
-    <header>
+    <header class="header">
       <h1>Buscador de series</h1>
     </header>
-    <main class="main">
-      <form action="">
-        <input class="js-input" type="text" value="Gilmore" />
-        <input class="js-btn" type="button" value="Buscar" />
-      </form>
-
-      <ul class="js-list"></ul>
-    </main>
-    <aside class="aside">
-      <h3>Mis series favoritas</h3>
-      <ul class="js-fav-list"></ul>
-    </aside>
+    <div class="body">
+      <main class="main">
+        <h2>Resultados de búsqueda:</h2>
+        <div>
+          <ul class="js-list main--list"></ul>
+        </div>
+      </main>
+      <aside class="aside">
+        <form action="">
+          <input class="js-input" type="text" value="Gilmore" />
+          <input class="js-btn" type="button" value="Buscar" />
+        </form>
+        <h3>Mis series favoritas</h3>
+        <div>
+          <ul class="js-fav-list aside--list"></ul>
+        </div>
+      </aside>
+    </div>
     <script src="./assets/js/main.js"></script>
   </body>
 </html>

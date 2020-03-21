@@ -1,0 +1,24 @@
+.main {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 4;
+  width: 70vw;
+  background-color: rgb(236, 190, 190);
+  padding: 20px 0 10px 10px;
+  //   border: solid red 3px;
+  &--list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+    &--item {
+      display: block;
+      grid-column: span 1;
+    }
+  }
+}
+@media all and (min-width: 1200px) {
+  .main--list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}

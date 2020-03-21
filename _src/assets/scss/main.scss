@@ -1,2 +1,9 @@
 @import 'core/reset';
 @import 'core/interactions';
+@import 'components/main';
+@import 'components/aside';
+@import 'components/header';
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
