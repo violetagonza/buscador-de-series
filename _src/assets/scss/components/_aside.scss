@@ -6,14 +6,42 @@
   width: 28, 5vw;
   background-color: rgb(255, 242, 189);
   padding: 10px 0 10px 20px;
-  //   border: solid blue 3px;
+
   &--form {
-    width: 200px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    &__input {
+      width: 150px;
+      height: 25px;
+      border: none;
+      border-bottom: solid 1px rgb(223, 124, 124);
+      padding: 5px;
+    }
+    &__button {
+      border: none;
+      background-color: rgb(223, 124, 124);
+      height: 25px;
+      width: 50px;
+      color: white;
+      outline: none;
+      border-bottom: solid 1px white;
+      &:hover {
+        background-color: white;
+        color: rgb(223, 124, 124);
+      }
+      &:active {
+        background-color: rgb(223, 124, 124);
+        color: white;
+      }
+    }
   }
   &--title {
-    margin-top: 10px;
-    padding: 5px 0 5px 0;
-    text-align: center;
+    margin: 10px 0 10px 0;
+    padding: 5px 0 10px 0;
+    font-size: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(63, 107, 100);
+    border-bottom: white solid 1px;
   }
 
   &--list {

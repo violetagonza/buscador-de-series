@@ -4,6 +4,9 @@
 @import 'components/aside';
 @import 'components/header';
 .body {
+  background-color: rgb(236, 190, 190);
+}
+.page-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
