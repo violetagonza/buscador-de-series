@@ -47,19 +47,16 @@ btn.addEventListener('click', handlebtn);
 //Creo array para favs
 let favs = [];
 
-//Añado al array el clickado
-function addShowToFavs() {
-  favs.push(searchResults[0]);
-  console.log(favs);
-}
 function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
-  let HTMLFavsCode;
-  HTMLFavsCode = `<li>${favs[0].show.name}`;
-  if (favs[0].show.image === null) {
-    HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${favs[0].show.name}"></li>`;
-  } else {
-    HTMLFavsCode += `<img src="${favs[0].show.image.medium}" alt="${favs[0].show.name}"></li>`;
+  let HTMLFavsCode = '';
+  for (let i = 0; i < favs.length; i++) {
+    HTMLFavsCode += `<li>${favs[i].name}`;
+    //   if (favs[i].imgurl === null) {
+    //     HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${favs[i].name}"></li>`;
+    //   } else {
+    HTMLFavsCode += `<img src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
+    //   }
   }
   favList.innerHTML = HTMLFavsCode;
 }
@@ -82,21 +79,22 @@ function handleCard(ev) {
   // Guardo el objeto dentro de favs
   favs.push({
     id: foundShow.show.id,
-    name: foundShow.show.name
-    // imgulr: ''
+    name: foundShow.show.name,
+    imgurl: 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV'
   });
   //Miro si el objeto tiene imgurl, si no lo tiene le meto la imagen por defecto
-  for (let i = 0; i < favs.length; i++) {
-    if (foundShow.show.image === null) {
-      favs[i].imgurl = 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV';
-    } else {
-      favs[i].imgurl = foundShow.show.image.medium;
-    }
-  }
+  // for (let i = 0; i < favs.length; i++) {
+  //   if (foundShow.show.image === null) {
+  //     favs[i].imgurl = 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV';
+  //   } else {
+  //     favs[i].imgurl = foundShow.show.image.medium;
+  //   }
+  // }
   //Ya está el objeto en el array, pero ahora se guardan diferentes versiones cada vez que haces click, hay que solucionar eso
   console.log(foundShow);
 
   console.log(favs);
+  paintFavs();
   setInLocalStorage();
 }
 
@@ -121,6 +119,15 @@ function findShowforFavs(ID, array) {
 
 //Local Storage
 
+function getFromLS() {
+  const LSFavs = localStorage.getItem('favorite shows');
+  if (LSFavs !== null) {
+    favs = JSON.parse(LSFavs);
+    paintFavs();
+  }
+}
+
 function setInLocalStorage() {
   localStorage.setItem('favorite shows', JSON.stringify(favs));
 }
+getFromLS();
