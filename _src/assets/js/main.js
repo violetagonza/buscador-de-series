@@ -79,11 +79,13 @@ function handleCard(ev) {
   console.log(clickedID);
   // Cojo la serie del producto clickado
   let foundShow = findShowforFavs(clickedID, searchResults);
+  // Guardo el objeto dentro de favs
   favs.push({
     id: foundShow.show.id,
-    name: foundShow.show.name,
-    imgulr: ''
+    name: foundShow.show.name
+    // imgulr: ''
   });
+  //Miro si el objeto tiene imgurl, si no lo tiene le meto la imagen por defecto
   for (let i = 0; i < favs.length; i++) {
     if (foundShow.show.image === null) {
       favs[i].imgurl = 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV';
@@ -91,10 +93,11 @@ function handleCard(ev) {
       favs[i].imgurl = foundShow.show.image.medium;
     }
   }
-
+  //Ya está el objeto en el array, pero ahora se guardan diferentes versiones cada vez que haces click, hay que solucionar eso
   console.log(foundShow);
 
   console.log(favs);
+  setInLocalStorage();
 }
 
 //Escucho las tarjetas
@@ -114,4 +117,10 @@ function findShowforFavs(ID, array) {
     }
   }
   return undefined;
+}
+
+//Local Storage
+
+function setInLocalStorage() {
+  localStorage.setItem('favorite shows', JSON.stringify(favs));
 }
