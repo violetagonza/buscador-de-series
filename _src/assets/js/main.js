@@ -28,11 +28,11 @@ function paintResults() {
   list.innerHTML = '';
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
-    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p class="main--list__text">${searchResults[i].show.name}</p>`;
+    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p id="${searchResults[i].show.id}" class="main--list__text">${searchResults[i].show.name}</p>`;
     if (searchResults[i].show.image === null) {
-      HTMLSearchcode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
+      HTMLSearchcode += `<img id="${searchResults[i].show.id}" src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
     } else {
-      HTMLSearchcode += `<img src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}"></li>`;
+      HTMLSearchcode += `<img id="${searchResults[i].show.id}" src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}"></li>`;
     }
   }
   list.innerHTML = HTMLSearchcode;
