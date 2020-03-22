@@ -8,7 +8,7 @@ let searchResults = [];
 //Fetch al servidor
 function handlebtn(ev) {
   ev.preventDefault();
-  fetch(`http://api.tvmaze.com/search/shows?q=${input.value}`)
+  fetch(`//api.tvmaze.com/search/shows?q=${input.value}`)
     .then(response => response.json())
     //Meto la info en el array searchResults
     .then(results => {
