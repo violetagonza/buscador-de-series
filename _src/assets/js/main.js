@@ -39,8 +39,8 @@ function paintResults() {
   list.innerHTML = '';
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
-    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p id="${searchResults[i].show.id}" class="main--list__text">${searchResults[i].show.name}</p>`;
-    HTMLSearchcode += `<img id="${searchResults[i].show.id}" src="${searchResults[i].image}" alt="${searchResults[i].show.name}"></li>`;
+    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p class="main--list__text">${searchResults[i].show.name}</p>`;
+    HTMLSearchcode += `<img src="${searchResults[i].image}" alt="${searchResults[i].show.name}"></li>`;
   }
   list.innerHTML = HTMLSearchcode;
   listenCards();
@@ -76,7 +76,7 @@ function handleCard(ev) {
     ev.currentTarget.classList.add('card--normal');
   }
   //Encuento id de tarjeta clickada
-  const clickedID = ev.target.id;
+  const clickedID = ev.currentTarget.id;
   console.log(clickedID);
   // Cojo la serie del producto clickado
   let foundShow = findShowforFavs(clickedID, searchResults);
