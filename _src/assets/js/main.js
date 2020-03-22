@@ -76,12 +76,25 @@ function handleCard(ev) {
   console.log(clickedID);
   // Cojo la serie del producto clickado
   let foundShow = findShowforFavs(clickedID, searchResults);
+  console.log(foundShow);
+  let isInFavs = false;
+  let favIndex;
   // Guardo el objeto dentro de favs
-  favs.push({
-    id: foundShow.show.id,
-    name: foundShow.show.name,
-    imgurl: 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV'
-  });
+  for (let i = 0; i < favs.length; i++) {
+    if (foundShow.show.id === favs[i].id) {
+      isInFavs = true;
+      favIndex = i;
+    }
+  }
+  console.log(isInFavs, favIndex);
+  if (isInFavs === false) {
+    favs.push({
+      id: foundShow.show.id,
+      name: foundShow.show.name,
+      imgurl: 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV'
+    });
+  }
+
   //Miro si el objeto tiene imgurl, si no lo tiene le meto la imagen por defecto
   // for (let i = 0; i < favs.length; i++) {
   //   if (foundShow.show.image === null) {
