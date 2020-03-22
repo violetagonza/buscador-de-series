@@ -13,7 +13,6 @@ function handlebtn(ev) {
     //Meto la info en el array searchResults
     .then(results => {
       searchResults = results;
-
       //¿Tiene imagen?
       for (let i = 0; i < searchResults.length; i++) {
         if (searchResults[i].show.image === null) {
@@ -48,7 +47,7 @@ btn.addEventListener('click', handlebtn);
 
 //Creo array para favs
 let favs = [];
-
+let icons;
 //Pinto favs
 function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
@@ -58,7 +57,14 @@ function paintFavs() {
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
   }
   favList.innerHTML = HTMLFavsCode;
-
+  icons = document.querySelectorAll('.js-icon');
+  console.log(icons);
+  function handleIcon() {
+    console.log('me han clickado');
+  }
+  for (const icon of icons) {
+    icon.addEventListener('click', handleIcon);
+  }
   //Recojo el icono
   // let icons = document.querySelectorAll('.js-icon');
   //Handler del icono
