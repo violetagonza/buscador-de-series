@@ -3,16 +3,11 @@
 const btn = document.querySelector('.js-btn');
 const input = document.querySelector('.js-input');
 
-//Handle del btn
-function handlebtn() {
-  event.preventDefault();
-  getData();
-}
-
 // Declaro un array para meter los resultados de búsqueda
 let searchResults = [];
 //Fetch al servidor
-function getData() {
+function handlebtn(ev) {
+  ev.preventDefault();
   fetch(`http://api.tvmaze.com/search/shows?q=${input.value}`)
     .then(response => response.json())
     //Meto la info en el array searchResults
@@ -59,10 +54,43 @@ function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
   let HTMLFavsCode = '';
   for (let i = 0; i < favs.length; i++) {
-    HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p> <i class="aside--list__icon fas fa-trash-alt"></i></div>`;
+    HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p> <i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt"></i></div>`;
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
   }
   favList.innerHTML = HTMLFavsCode;
+
+  //Recojo el icono
+  // let icons = document.querySelectorAll('.js-icon');
+  //Handler del icono
+  // function handleIcon(ev) {
+  //   deleteFav();
+  // //Busco el icono clickado
+  // let clickedID = ev.currentTarget.id;
+  // console.log(clickedID);
+
+  // function findFavforDelete() {
+  //   for (const object of favs) {
+  //     if (object.id === parseInt(clickedID)) {
+  //       return object;
+  //     }
+  //   }
+  //   return undefined;
+  // }
+  // let foundFav = findFavforDelete();
+  // console.log(foundFav);
+
+  // //Busco en el array el elemento clickado y si está, lo borro
+  // for (let i = 0; i < favs.length; i++) {
+  //   if (foundFav !== undefined) {
+  //     favs.splice(i);
+  //   }
+  //   console.log('Me han clickado');
+  // }
+
+  //escucho el icon
+  // for (let icon of icons) {
+  //   icon.addEventListener('click', handleIcon);
+  // }
 }
 
 // //Handle de la tarjeta
@@ -76,6 +104,7 @@ function handleCard(ev) {
     ev.currentTarget.classList.add('card--normal');
   }
   //Encuento id de tarjeta clickada
+  let favIndex;
   const clickedID = ev.currentTarget.id;
   console.log(clickedID);
   // Cojo la serie del producto clickado
@@ -84,13 +113,13 @@ function handleCard(ev) {
 
   //Miro si el objeto está ya en favs
   let isInFavs = false;
-  let favIndex;
   for (let i = 0; i < favs.length; i++) {
     if (foundShow.show.id === favs[i].id) {
       isInFavs = true;
       favIndex = i;
     }
   }
+
   console.log(isInFavs, favIndex);
 
   // Guardo el objeto dentro de favs
@@ -101,6 +130,7 @@ function handleCard(ev) {
       imgurl: foundShow.image
     });
   }
+
   paintFavs();
   setInLocalStorage();
 }
