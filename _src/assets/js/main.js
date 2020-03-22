@@ -48,6 +48,44 @@ btn.addEventListener('click', handlebtn);
 //Creo array para favs
 let favs = [];
 let icons;
+
+//Varieble para ver el ID del favorito clickado
+let clickedFavID;
+let foundFavForDelete;
+
+//Función para borrar o añadir favoritos
+function addOrDeleteFavs() {
+  // //Miro si el objeto está ya en favs
+  let isInFavs = false;
+  let favIndex;
+  for (let i = 0; i < favs.length; i++) {
+    if (foundShow.show.id === favs[i].id) {
+      isInFavs = true;
+      favIndex = i;
+    }
+  }
+  console.log(isInFavs, favIndex);
+
+  // Guardo el objeto dentro de favs
+  if (isInFavs === false) {
+    favs.push({
+      id: foundShow.show.id,
+      name: foundShow.show.name,
+      imgurl: foundShow.image
+    });
+  } else {
+    favs.splice(favIndex);
+  }
+}
+function deleteFav() {
+  for (let i = 0; i < favs.length; i++) {
+    if (foundFavForDelete.id === favs[i].id) {
+      favs.splice(i, 1);
+    }
+    paintFavs();
+  }
+}
+
 //Pinto favs
 function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
@@ -57,49 +95,39 @@ function paintFavs() {
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
   }
   favList.innerHTML = HTMLFavsCode;
+
+  //Recojo el icono
   icons = document.querySelectorAll('.js-icon');
-  console.log(icons);
-  function handleIcon() {
+
+  // handler del icono
+  function handleIcon(ev) {
     console.log('me han clickado');
+    // //Busco el icono clickado
+    clickedFavID = ev.currentTarget.id;
+    foundFavForDelete = findFavforDelete();
+    console.log(clickedFavID, foundFavForDelete);
+    deleteFav();
+    setInLocalStorage();
   }
+
+  //Escucho el icono
   for (const icon of icons) {
     icon.addEventListener('click', handleIcon);
   }
-  //Recojo el icono
-  // let icons = document.querySelectorAll('.js-icon');
-  //Handler del icono
-  // function handleIcon(ev) {
-  //   deleteFav();
-  // //Busco el icono clickado
-  // let clickedID = ev.currentTarget.id;
-  // console.log(clickedID);
-
-  // function findFavforDelete() {
-  //   for (const object of favs) {
-  //     if (object.id === parseInt(clickedID)) {
-  //       return object;
-  //     }
-  //   }
-  //   return undefined;
-  // }
-  // let foundFav = findFavforDelete();
-  // console.log(foundFav);
-
-  // //Busco en el array el elemento clickado y si está, lo borro
-  // for (let i = 0; i < favs.length; i++) {
-  //   if (foundFav !== undefined) {
-  //     favs.splice(i);
-  //   }
-  //   console.log('Me han clickado');
-  // }
-
-  //escucho el icon
-  // for (let icon of icons) {
-  //   icon.addEventListener('click', handleIcon);
-  // }
+  //Encuentro el objeto correspondiente al icono clockado
+  function findFavforDelete() {
+    for (const object of favs) {
+      if (object.id === parseInt(clickedFavID)) {
+        return object;
+      }
+    }
+    return undefined;
+  }
 }
 
 // //Handle de la tarjeta
+let clickedID;
+let foundShow;
 function handleCard(ev) {
   //Cambio de color cuando hago click
   if (ev.currentTarget.classList.contains('card--normal')) {
@@ -110,33 +138,13 @@ function handleCard(ev) {
     ev.currentTarget.classList.add('card--normal');
   }
   //Encuento id de tarjeta clickada
-  let favIndex;
-  const clickedID = ev.currentTarget.id;
+
+  clickedID = ev.currentTarget.id;
   console.log(clickedID);
   // Cojo la serie del producto clickado
-  let foundShow = findShowforFavs(clickedID, searchResults);
+  foundShow = findShowforFavs(clickedID, searchResults);
   console.log(foundShow);
-
-  //Miro si el objeto está ya en favs
-  let isInFavs = false;
-  for (let i = 0; i < favs.length; i++) {
-    if (foundShow.show.id === favs[i].id) {
-      isInFavs = true;
-      favIndex = i;
-    }
-  }
-
-  console.log(isInFavs, favIndex);
-
-  // Guardo el objeto dentro de favs
-  if (isInFavs === false) {
-    favs.push({
-      id: foundShow.show.id,
-      name: foundShow.show.name,
-      imgurl: foundShow.image
-    });
-  }
-
+  addOrDeleteFavs();
   paintFavs();
   setInLocalStorage();
 }
@@ -150,6 +158,7 @@ function listenCards() {
     card.addEventListener('click', handleCard);
   }
 }
+
 //Función que busca la serie dentro del array mediante su ID
 function findShowforFavs(ID, array) {
   for (const object of array) {
