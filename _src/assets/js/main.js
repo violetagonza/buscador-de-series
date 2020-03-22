@@ -18,6 +18,17 @@ function getData() {
     //Meto la info en el array searchResults
     .then(results => {
       searchResults = results;
+
+      //¿Tiene imagen?
+      for (let i = 0; i < searchResults.length; i++) {
+        if (searchResults[i].show.image === null) {
+          //No la tiene: le añado la url de la imagen por defecto
+          searchResults[i].image = 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV';
+        } else {
+          //La tiene: le añado la url de searchResults.image.medium a image
+          searchResults[i].image = searchResults[i].show.image.medium;
+        }
+      }
       paintResults();
     });
 }
@@ -29,11 +40,7 @@ function paintResults() {
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
     HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p id="${searchResults[i].show.id}" class="main--list__text">${searchResults[i].show.name}</p>`;
-    if (searchResults[i].show.image === null) {
-      HTMLSearchcode += `<img id="${searchResults[i].show.id}" src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${searchResults[i].show.name}"></li>`;
-    } else {
-      HTMLSearchcode += `<img id="${searchResults[i].show.id}" src="${searchResults[i].show.image.medium}" alt="${searchResults[i].show.name}"></li>`;
-    }
+    HTMLSearchcode += `<img id="${searchResults[i].show.id}" src="${searchResults[i].image}" alt="${searchResults[i].show.name}"></li>`;
   }
   list.innerHTML = HTMLSearchcode;
   listenCards();
@@ -47,16 +54,13 @@ btn.addEventListener('click', handlebtn);
 //Creo array para favs
 let favs = [];
 
+//Pinto favs
 function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
   let HTMLFavsCode = '';
   for (let i = 0; i < favs.length; i++) {
     HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p> <i class="aside--list__icon fas fa-trash-alt"></i></div>`;
-    //   if (favs[i].imgurl === null) {
-    //     HTMLFavsCode += `<img src="https://via.placeholder.com/210x295/ffffff/666666/? text=TV" alt="${favs[i].name}"></li>`;
-    //   } else {
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
-    //   }
   }
   favList.innerHTML = HTMLFavsCode;
 }
@@ -77,9 +81,10 @@ function handleCard(ev) {
   // Cojo la serie del producto clickado
   let foundShow = findShowforFavs(clickedID, searchResults);
   console.log(foundShow);
+
+  //Miro si el objeto está ya en favs
   let isInFavs = false;
   let favIndex;
-  // Guardo el objeto dentro de favs
   for (let i = 0; i < favs.length; i++) {
     if (foundShow.show.id === favs[i].id) {
       isInFavs = true;
@@ -87,26 +92,15 @@ function handleCard(ev) {
     }
   }
   console.log(isInFavs, favIndex);
+
+  // Guardo el objeto dentro de favs
   if (isInFavs === false) {
     favs.push({
       id: foundShow.show.id,
       name: foundShow.show.name,
-      imgurl: 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV'
+      imgurl: foundShow.image
     });
   }
-
-  //Miro si el objeto tiene imgurl, si no lo tiene le meto la imagen por defecto
-  // for (let i = 0; i < favs.length; i++) {
-  //   if (foundShow.show.image === null) {
-  //     favs[i].imgurl = 'https://via.placeholder.com/210x295/ffffff/666666/? text=TV';
-  //   } else {
-  //     favs[i].imgurl = foundShow.show.image.medium;
-  //   }
-  // }
-  //Ya está el objeto en el array, pero ahora se guardan diferentes versiones cada vez que haces click, hay que solucionar eso
-  console.log(foundShow);
-
-  console.log(favs);
   paintFavs();
   setInLocalStorage();
 }
