@@ -89,7 +89,7 @@ function addOrDeleteFavs() {
       imgurl: foundShow.image
     });
   } else {
-    favs.splice(favIndex);
+    favs.splice(favIndex, 1);
   }
 }
 function deleteFav() {
