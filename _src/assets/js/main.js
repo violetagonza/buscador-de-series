@@ -110,6 +110,7 @@ function paintFavs() {
     HTMLFavsCode += `<i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt" title="Borrar serie"></i></div>`;
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
   }
+  HTMLFavsCode += '<button class="js-reset-btn"> Borrar todos los favoritos</button>';
   favList.innerHTML = HTMLFavsCode;
 
   //Recojo el icono
@@ -130,7 +131,7 @@ function paintFavs() {
   for (const icon of icons) {
     icon.addEventListener('click', handleIcon);
   }
-  //Encuentro el objeto correspondiente al icono clockado
+  //Encuentro el objeto correspondiente al icono clickado
   function findFavforDelete() {
     for (const object of favs) {
       if (object.id === parseInt(clickedFavID)) {
@@ -139,8 +140,34 @@ function paintFavs() {
     }
     return undefined;
   }
-}
 
+  //Recojo el botón de reset
+  const resetBtn = document.querySelector('.js-reset-btn');
+  function handleResetBtn() {
+    //Borro de LS
+    deleteFromLS();
+    //Vacío la lista
+    favList.innerHTML = '';
+    //Quito la clase de seleccionadas y le añado la de no seleccionadas a las tarjetas
+    paintResults();
+    // removeClassForResetBtn();
+    // let searchList = document.querySelectorAll('.js--card');
+    // for (const item of searchList) {
+    //   item.classList.remove('card--fav');
+    //   item.classList.add('card--normal');
+    // }
+    console.log('Me han clickado');
+  }
+  //Escucho el botón de reset
+  resetBtn.addEventListener('click', handleResetBtn);
+}
+// function removeClassForResetBtn() {
+//   let searchList = document.querySelectorAll('.js--card');
+//   for (const item of searchList) {
+//     item.classList.remove('card--fav');
+//     item.classList.add('card--normal');
+//   }
+// }
 // //Handle de la tarjeta
 let clickedID;
 let foundShow;
@@ -195,7 +222,12 @@ function getFromLS() {
   }
 }
 
+function deleteFromLS() {
+  localStorage.removeItem('favorite shows');
+}
+
 function setInLocalStorage() {
   localStorage.setItem('favorite shows', JSON.stringify(favs));
 }
+
 getFromLS();
