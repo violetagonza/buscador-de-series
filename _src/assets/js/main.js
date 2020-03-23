@@ -6,6 +6,7 @@ const input = document.querySelector('.js-input');
 // Declaro un array para meter los resultados de búsqueda
 let searchResults = [];
 //Fetch al servidor
+
 function handlebtn(ev) {
   ev.preventDefault();
   fetch(`//api.tvmaze.com/search/shows?q=${input.value}`)
@@ -24,6 +25,7 @@ function handlebtn(ev) {
         }
       }
       paintResults();
+      addOrRemoveClassInCards();
     });
 }
 
@@ -33,11 +35,24 @@ function paintResults() {
   list.innerHTML = '';
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
-    HTMLSearchcode += `<li id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p class="main--list__text">${searchResults[i].show.name}</p>`;
+    HTMLSearchcode += `<li title="Click para añadir a favoritos" id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p class="main--list__text">${searchResults[i].show.name}</p>`;
     HTMLSearchcode += `<img src="${searchResults[i].image}" alt="${searchResults[i].show.name}"></li>`;
   }
+
   list.innerHTML = HTMLSearchcode;
   listenCards();
+}
+//Miro si la serie del resultado de búsqueda está en favoritos y si está le añado la clase del color de series seleccionadas
+function addOrRemoveClassInCards() {
+  for (let i = 0; i < searchResults.length; i++) {
+    for (let index = 0; index < favs.length; index++) {
+      if (searchResults[i].show.id === favs[index].id) {
+        document.getElementById(searchResults[i].show.id).classList.add('card--fav');
+      } else {
+        document.getElementById(searchResults[i].show.id).classList.add('card--normal');
+      }
+    }
+  }
 }
 
 //Escucho al botón
@@ -91,7 +106,8 @@ function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
   let HTMLFavsCode = '';
   for (let i = 0; i < favs.length; i++) {
-    HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p> <i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt"></i></div>`;
+    HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p>`;
+    HTMLFavsCode += `<i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt" title="Borrar serie"></i></div>`;
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
   }
   favList.innerHTML = HTMLFavsCode;
