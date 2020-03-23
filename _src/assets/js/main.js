@@ -8,6 +8,8 @@ const input = document.querySelector('.js-input');
 
 // Declaro un array para meter los resultados de búsqueda
 let searchResults = [];
+//Creo array para favoritos
+let favs = [];
 
 //Fetch al servidor
 function handlebtn(ev) {
@@ -28,7 +30,6 @@ function handlebtn(ev) {
         }
       }
       paintResults();
-      addOrRemoveClassInCards();
     });
 }
 
@@ -43,6 +44,7 @@ function paintResults() {
   }
 
   list.innerHTML = HTMLSearchcode;
+  addOrRemoveClassInCards();
   listenCards();
 }
 
@@ -64,8 +66,6 @@ btn.addEventListener('click', handlebtn);
 
 //PINTAR EN FAVS Y METER/SACAR EN ARRAY favs
 
-//Creo array para favs
-let favs = [];
 //Creo variable para los botones de borrar
 let deleteIcons;
 
@@ -95,6 +95,9 @@ function addOrDeleteFavs() {
   } else {
     favs.splice(favIndex, 1);
   }
+  paintFavs();
+  paintResults();
+  setInLocalStorage();
 }
 //Borro de favs (para click en el botón de borrar en la lista de favoritos)
 function deleteFav() {
@@ -102,8 +105,10 @@ function deleteFav() {
     if (foundFavForDelete.id === favs[i].id) {
       favs.splice(i, 1);
     }
-    paintFavs();
   }
+  paintFavs();
+  paintResults();
+  setInLocalStorage();
 }
 
 //Pinto la lista de favoritos
@@ -123,11 +128,9 @@ function paintFavs() {
 
   // handler del icono
   function handleIcon(ev) {
-    console.log('me han clickado');
     // //Busco el icono clickado
     clickedFavID = ev.currentTarget.id;
     foundFavForDelete = findFavforDelete();
-    console.log(clickedFavID, foundFavForDelete);
     deleteFav();
     setInLocalStorage();
     paintResults();
@@ -150,10 +153,12 @@ function paintFavs() {
   //Recojo el botón de reset
   const resetBtn = document.querySelector('.js-reset-btn');
   function handleResetBtn() {
-    //Borro de LS
-    deleteFromLS();
-    //Vacío la lista
-    favList.innerHTML = '';
+    //Borro del array
+    favs = [];
+    //Vuelvo a guardar en LS (Esta vez vacío)
+    setInLocalStorage();
+    //Vuelvo a pintar los favs
+    paintFavs();
     //Vuelvo a pintar los resultados para que no sagan seleccionadas las tarjetas
     paintResults();
   }
@@ -176,10 +181,8 @@ function handleCard(ev) {
 
   //Encuento id de tarjeta clickada
   clickedID = ev.currentTarget.id;
-  console.log(clickedID);
   // Cojo la serie del producto clickado
   foundShow = findShowforFavs(clickedID, searchResults);
-  console.log(foundShow);
   addOrDeleteFavs();
   paintFavs();
   setInLocalStorage();
@@ -214,10 +217,6 @@ function getFromLS() {
     favs = JSON.parse(LSFavs);
     paintFavs();
   }
-}
-//Borro de LS con el botón de reset
-function deleteFromLS() {
-  localStorage.removeItem('favorite shows');
 }
 
 //Guardo en LS con favoritos
