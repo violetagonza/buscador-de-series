@@ -1,5 +1,6 @@
 #Buscador de series
-Pasos para buscar tu serie:
+
+- Pasos para buscar tu serie:
 
 1. Introduce la serie que quiera buscar en el campo de búsqueda
 2. Selecciona las series que quieras añadir a tu lista de favoritos
