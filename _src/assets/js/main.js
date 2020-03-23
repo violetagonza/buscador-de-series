@@ -1,12 +1,15 @@
 'use strict';
+
+//PINTAR RESULTADOS Y METER EN ARRAY searchResults
+
 //Recojo el button y el input
 const btn = document.querySelector('.js-btn');
 const input = document.querySelector('.js-input');
 
 // Declaro un array para meter los resultados de búsqueda
 let searchResults = [];
-//Fetch al servidor
 
+//Fetch al servidor
 function handlebtn(ev) {
   ev.preventDefault();
   fetch(`//api.tvmaze.com/search/shows?q=${input.value}`)
@@ -42,6 +45,7 @@ function paintResults() {
   list.innerHTML = HTMLSearchcode;
   listenCards();
 }
+
 //Miro si la serie del resultado de búsqueda está en favoritos y si está le añado la clase del color de series seleccionadas
 function addOrRemoveClassInCards() {
   for (let i = 0; i < searchResults.length; i++) {
@@ -58,11 +62,12 @@ function addOrRemoveClassInCards() {
 //Escucho al botón
 btn.addEventListener('click', handlebtn);
 
-//Favs
+//PINTAR EN FAVS Y METER/SACAR EN ARRAY favs
 
 //Creo array para favs
 let favs = [];
-let icons;
+//Creo variable para los botones de borrar
+let deleteIcons;
 
 //Varieble para ver el ID del favorito clickado
 let clickedFavID;
@@ -79,9 +84,8 @@ function addOrDeleteFavs() {
       favIndex = i;
     }
   }
-  console.log(isInFavs, favIndex);
 
-  // Guardo el objeto dentro de favs
+  // Guardo o borro el objeto dentro de favs (para el click en la tarjeta de búsquedas)
   if (isInFavs === false) {
     favs.push({
       id: foundShow.show.id,
@@ -92,6 +96,7 @@ function addOrDeleteFavs() {
     favs.splice(favIndex, 1);
   }
 }
+//Borro de favs (para click en el botón de borrar en la lista de favoritos)
 function deleteFav() {
   for (let i = 0; i < favs.length; i++) {
     if (foundFavForDelete.id === favs[i].id) {
@@ -101,7 +106,7 @@ function deleteFav() {
   }
 }
 
-//Pinto favs
+//Pinto la lista de favoritos
 function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
   let HTMLFavsCode = '';
@@ -110,11 +115,11 @@ function paintFavs() {
     HTMLFavsCode += `<i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt" title="Borrar serie"></i></div>`;
     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
   }
-  HTMLFavsCode += '<button class="js-reset-btn"> Borrar todos los favoritos</button>';
+  HTMLFavsCode += '<button class="js-reset-btn aside--list__reset" title="Borrar todos los favoritos"> Borrar todos los favoritos</button>';
   favList.innerHTML = HTMLFavsCode;
 
-  //Recojo el icono
-  icons = document.querySelectorAll('.js-icon');
+  //Recojo el icono de borrar
+  deleteIcons = document.querySelectorAll('.js-icon');
 
   // handler del icono
   function handleIcon(ev) {
@@ -125,10 +130,11 @@ function paintFavs() {
     console.log(clickedFavID, foundFavForDelete);
     deleteFav();
     setInLocalStorage();
+    paintResults();
   }
 
   //Escucho el icono
-  for (const icon of icons) {
+  for (const icon of deleteIcons) {
     icon.addEventListener('click', handleIcon);
   }
   //Encuentro el objeto correspondiente al icono clickado
@@ -148,27 +154,14 @@ function paintFavs() {
     deleteFromLS();
     //Vacío la lista
     favList.innerHTML = '';
-    //Quito la clase de seleccionadas y le añado la de no seleccionadas a las tarjetas
+    //Vuelvo a pintar los resultados para que no sagan seleccionadas las tarjetas
     paintResults();
-    // removeClassForResetBtn();
-    // let searchList = document.querySelectorAll('.js--card');
-    // for (const item of searchList) {
-    //   item.classList.remove('card--fav');
-    //   item.classList.add('card--normal');
-    // }
-    console.log('Me han clickado');
   }
   //Escucho el botón de reset
   resetBtn.addEventListener('click', handleResetBtn);
 }
-// function removeClassForResetBtn() {
-//   let searchList = document.querySelectorAll('.js--card');
-//   for (const item of searchList) {
-//     item.classList.remove('card--fav');
-//     item.classList.add('card--normal');
-//   }
-// }
-// //Handle de la tarjeta
+
+// //Handler de la tarjeta
 let clickedID;
 let foundShow;
 function handleCard(ev) {
@@ -180,8 +173,8 @@ function handleCard(ev) {
     ev.currentTarget.classList.remove('card--fav');
     ev.currentTarget.classList.add('card--normal');
   }
-  //Encuento id de tarjeta clickada
 
+  //Encuento id de tarjeta clickada
   clickedID = ev.currentTarget.id;
   console.log(clickedID);
   // Cojo la serie del producto clickado
@@ -212,8 +205,9 @@ function findShowforFavs(ID, array) {
   return undefined;
 }
 
-//Local Storage
+//LOCAL STORAGE
 
+//Recojo de LS y pinto en favs cuando arranca la página
 function getFromLS() {
   const LSFavs = localStorage.getItem('favorite shows');
   if (LSFavs !== null) {
@@ -221,11 +215,12 @@ function getFromLS() {
     paintFavs();
   }
 }
-
+//Borro de LS con el botón de reset
 function deleteFromLS() {
   localStorage.removeItem('favorite shows');
 }
 
+//Guardo en LS con favoritos
 function setInLocalStorage() {
   localStorage.setItem('favorite shows', JSON.stringify(favs));
 }
