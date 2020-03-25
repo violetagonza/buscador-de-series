@@ -40,6 +40,7 @@ function paintResults() {
   let HTMLSearchcode = '';
   for (let i = 0; i < searchResults.length; i++) {
     HTMLSearchcode += `<li title="Click para añadir a favoritos" id="${searchResults[i].show.id}" class="main--list__item card--normal js-card"> <p class="main--list__text">${searchResults[i].show.name}</p>`;
+    HTMLSearchcode += `<p>${searchResults[i].show.genres.join(' - ')}</p>`;
     HTMLSearchcode += `<img src="${searchResults[i].image}" alt="${searchResults[i].show.name}"></li>`;
   }
 
@@ -74,97 +75,97 @@ let clickedFavID;
 let foundFavForDelete;
 
 //Función para borrar o añadir favoritos
-function addOrDeleteFavs() {
-  // //Miro si el objeto está ya en favs
-  let isInFavs = false;
-  let favIndex;
-  for (let i = 0; i < favs.length; i++) {
-    if (foundShow.show.id === favs[i].id) {
-      isInFavs = true;
-      favIndex = i;
-    }
-  }
+// function addOrDeleteFavs() {
+//   // //Miro si el objeto está ya en favs
+//   let isInFavs = false;
+//   let favIndex;
+//   for (let i = 0; i < favs.length; i++) {
+//     if (foundShow.show.id === favs[i].id) {
+//       isInFavs = true;
+//       favIndex = i;
+//     }
+//   }
 
-  // Guardo o borro el objeto dentro de favs (para el click en la tarjeta de búsquedas)
-  if (isInFavs === false) {
-    favs.push({
-      id: foundShow.show.id,
-      name: foundShow.show.name,
-      imgurl: foundShow.image
-    });
-  } else {
-    favs.splice(favIndex, 1);
-  }
-  paintFavs();
-  paintResults();
-  setInLocalStorage();
-}
-//Borro de favs (para click en el botón de borrar en la lista de favoritos)
-function deleteFav() {
-  for (let i = 0; i < favs.length; i++) {
-    if (foundFavForDelete.id === favs[i].id) {
-      favs.splice(i, 1);
-    }
-  }
-  paintFavs();
-  paintResults();
-  setInLocalStorage();
-}
+//   // Guardo o borro el objeto dentro de favs (para el click en la tarjeta de búsquedas)
+//   if (isInFavs === false) {
+//     favs.push({
+//       id: foundShow.show.id,
+//       name: foundShow.show.name,
+//       imgurl: foundShow.image
+//     });
+//   } else {
+//     favs.splice(favIndex, 1);
+//   }
+//   paintFavs();
+//   paintResults();
+//   setInLocalStorage();
+// }
+// //Borro de favs (para click en el botón de borrar en la lista de favoritos)
+// function deleteFav() {
+//   for (let i = 0; i < favs.length; i++) {
+//     if (foundFavForDelete.id === favs[i].id) {
+//       favs.splice(i, 1);
+//     }
+//   }
+//   paintFavs();
+//   paintResults();
+//   setInLocalStorage();
+// }
 
-//Pinto la lista de favoritos
-function paintFavs() {
-  const favList = document.querySelector('.js-fav-list');
-  let HTMLFavsCode = '';
-  for (let i = 0; i < favs.length; i++) {
-    HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p>`;
-    HTMLFavsCode += `<i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt" title="Borrar serie"></i></div>`;
-    HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
-  }
-  HTMLFavsCode += '<button class="js-reset-btn aside--list__reset" title="Borrar todos los favoritos"> Borrar todos los favoritos</button>';
-  favList.innerHTML = HTMLFavsCode;
+// //Pinto la lista de favoritos
+// function paintFavs() {
+//   const favList = document.querySelector('.js-fav-list');
+//   let HTMLFavsCode = '';
+//   for (let i = 0; i < favs.length; i++) {
+//     HTMLFavsCode += `<li><div class="aside--list-div"><p class="aside--list__text">${favs[i].name}</p>`;
+//     HTMLFavsCode += `<i id="${favs[i].id}" class="js-icon aside--list__icon fas fa-trash-alt" title="Borrar serie"></i></div>`;
+//     HTMLFavsCode += `<img class="aside--list__img" src="${favs[i].imgurl}" alt="${favs[i].name}"></li>`;
+//   }
+//   HTMLFavsCode += '<button class="js-reset-btn aside--list__reset" title="Borrar todos los favoritos"> Borrar todos los favoritos</button>';
+//   favList.innerHTML = HTMLFavsCode;
 
-  //Recojo el icono de borrar
-  deleteIcons = document.querySelectorAll('.js-icon');
+//   //Recojo el icono de borrar
+//   deleteIcons = document.querySelectorAll('.js-icon');
 
-  // handler del icono
-  function handleIcon(ev) {
-    // //Busco el icono clickado
-    clickedFavID = ev.currentTarget.id;
-    foundFavForDelete = findFavforDelete();
-    deleteFav();
-    setInLocalStorage();
-    paintResults();
-  }
+//   // handler del icono
+//   function handleIcon(ev) {
+//     // //Busco el icono clickado
+//     clickedFavID = ev.currentTarget.id;
+//     foundFavForDelete = findFavforDelete();
+//     deleteFav();
+//     setInLocalStorage();
+//     paintResults();
+//   }
 
-  //Escucho el icono
-  for (const icon of deleteIcons) {
-    icon.addEventListener('click', handleIcon);
-  }
-  //Encuentro el objeto correspondiente al icono clickado
-  function findFavforDelete() {
-    for (const object of favs) {
-      if (object.id === parseInt(clickedFavID)) {
-        return object;
-      }
-    }
-    return undefined;
-  }
+//   //Escucho el icono
+//   for (const icon of deleteIcons) {
+//     icon.addEventListener('click', handleIcon);
+//   }
+//   //Encuentro el objeto correspondiente al icono clickado
+//   function findFavforDelete() {
+//     for (const object of favs) {
+//       if (object.id === parseInt(clickedFavID)) {
+//         return object;
+//       }
+//     }
+//     return undefined;
+//   }
 
-  //Recojo el botón de reset
-  const resetBtn = document.querySelector('.js-reset-btn');
-  function handleResetBtn() {
-    //Borro del array
-    favs = [];
-    //Vuelvo a guardar en LS (Esta vez vacío)
-    setInLocalStorage();
-    //Vuelvo a pintar los favs
-    paintFavs();
-    //Vuelvo a pintar los resultados para que no sagan seleccionadas las tarjetas
-    paintResults();
-  }
-  //Escucho el botón de reset
-  resetBtn.addEventListener('click', handleResetBtn);
-}
+//   //Recojo el botón de reset
+//   const resetBtn = document.querySelector('.js-reset-btn');
+//   function handleResetBtn() {
+//     //Borro del array
+//     favs = [];
+//     //Vuelvo a guardar en LS (Esta vez vacío)
+//     setInLocalStorage();
+//     //Vuelvo a pintar los favs
+//     paintFavs();
+//     //Vuelvo a pintar los resultados para que no sagan seleccionadas las tarjetas
+//     paintResults();
+//   }
+//   //Escucho el botón de reset
+//   resetBtn.addEventListener('click', handleResetBtn);
+// }
 
 // //Handler de la tarjeta
 let clickedID;
@@ -183,9 +184,10 @@ function handleCard(ev) {
   clickedID = ev.currentTarget.id;
   // Cojo la serie del producto clickado
   foundShow = findShowforFavs(clickedID, searchResults);
-  addOrDeleteFavs();
-  paintFavs();
-  setInLocalStorage();
+  // addOrDeleteFavs();
+  // paintFavs();
+  // setInLocalStorage();
+  console.log(foundShow.show.name);
 }
 
 //Escucho las tarjetas
@@ -210,18 +212,18 @@ function findShowforFavs(ID, array) {
 
 //LOCAL STORAGE
 
-//Recojo de LS y pinto en favs cuando arranca la página
-function getFromLS() {
-  const LSFavs = localStorage.getItem('favorite shows');
-  if (LSFavs !== null) {
-    favs = JSON.parse(LSFavs);
-    paintFavs();
-  }
-}
+// //Recojo de LS y pinto en favs cuando arranca la página
+// function getFromLS() {
+//   const LSFavs = localStorage.getItem('favorite shows');
+//   if (LSFavs !== null) {
+//     favs = JSON.parse(LSFavs);
+//     paintFavs();
+//   }
+// }
 
-//Guardo en LS con favoritos
-function setInLocalStorage() {
-  localStorage.setItem('favorite shows', JSON.stringify(favs));
-}
+// //Guardo en LS con favoritos
+// function setInLocalStorage() {
+//   localStorage.setItem('favorite shows', JSON.stringify(favs));
+// }
 
-getFromLS();
+// getFromLS();
