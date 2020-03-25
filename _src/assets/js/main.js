@@ -111,6 +111,35 @@ function deleteFav() {
   setInLocalStorage();
 }
 
+//Escucha los botones de borrar
+function listenDeleteIcons() {
+  //Recojo el icono de borrar
+  deleteIcons = document.querySelectorAll('.js-icon');
+  //Escucho el icono
+  for (const icon of deleteIcons) {
+    icon.addEventListener('click', handleIcon);
+  }
+}
+
+// handler de los iconos de borrar
+function handleIcon(ev) {
+  // //Busco el icono clickado
+  clickedFavID = ev.currentTarget.id;
+  foundFavForDelete = findFavforDelete();
+  deleteFav();
+  setInLocalStorage();
+  paintResults();
+}
+//Encuentra la serie para borrar mediante los iconos de borrar
+function findFavforDelete() {
+  for (const object of favs) {
+    if (object.id === parseInt(clickedFavID)) {
+      return object;
+    }
+  }
+  return undefined;
+}
+
 //Pinto la lista de favoritos
 function paintFavs() {
   const favList = document.querySelector('.js-fav-list');
@@ -122,62 +151,41 @@ function paintFavs() {
   }
   HTMLFavsCode += '<button class="js-reset-btn aside--list__reset" title="Borrar todos los favoritos"> Borrar todos los favoritos</button>';
   favList.innerHTML = HTMLFavsCode;
+  listenDeleteIcons();
+  listenResetBtn();
+}
 
-  //Recojo el icono de borrar
-  deleteIcons = document.querySelectorAll('.js-icon');
-
-  // handler del icono
-  function handleIcon(ev) {
-    // //Busco el icono clickado
-    clickedFavID = ev.currentTarget.id;
-    foundFavForDelete = findFavforDelete();
-    deleteFav();
-    setInLocalStorage();
-    paintResults();
-  }
-
-  //Escucho el icono
-  for (const icon of deleteIcons) {
-    icon.addEventListener('click', handleIcon);
-  }
-  //Encuentro el objeto correspondiente al icono clickado
-  function findFavforDelete() {
-    for (const object of favs) {
-      if (object.id === parseInt(clickedFavID)) {
-        return object;
-      }
-    }
-    return undefined;
-  }
-
-  //Recojo el botón de reset
+function listenResetBtn() {
   const resetBtn = document.querySelector('.js-reset-btn');
-  function handleResetBtn() {
-    //Borro del array
-    favs = [];
-    //Vuelvo a guardar en LS (Esta vez vacío)
-    setInLocalStorage();
-    //Vuelvo a pintar los favs
-    paintFavs();
-    //Vuelvo a pintar los resultados para que no sagan seleccionadas las tarjetas
-    paintResults();
-  }
   //Escucho el botón de reset
   resetBtn.addEventListener('click', handleResetBtn);
+}
+
+//Handler del boton de reset
+function handleResetBtn() {
+  //Borro del array
+  favs = [];
+  //Vuelvo a guardar en LS (Esta vez vacío)
+  setInLocalStorage();
+  //Vuelvo a pintar los favs
+  paintFavs();
+  //Vuelvo a pintar los resultados para que no sagan seleccionadas las tarjetas
+  paintResults();
 }
 
 // //Handler de la tarjeta
 let clickedID;
 let foundShow;
 function handleCard(ev) {
+  //ESTA LA BORRO PORQUE NO SIRVE PARA NADA, AHORA SALEN CON COLOR DISTINTO SI ESTÁN EN FAVORITOS
   //Cambio de color cuando hago click
-  if (ev.currentTarget.classList.contains('card--normal')) {
-    ev.currentTarget.classList.remove('card--normal');
-    ev.currentTarget.classList.add('card--fav');
-  } else if (ev.currentTarget.classList.contains('card--fav')) {
-    ev.currentTarget.classList.remove('card--fav');
-    ev.currentTarget.classList.add('card--normal');
-  }
+  // if (ev.currentTarget.classList.contains('card--normal')) {
+  //   ev.currentTarget.classList.remove('card--normal');
+  //   ev.currentTarget.classList.add('card--fav');
+  // } else if (ev.currentTarget.classList.contains('card--fav')) {
+  //   ev.currentTarget.classList.remove('card--fav');
+  //   ev.currentTarget.classList.add('card--normal');
+  // }
 
   //Encuento id de tarjeta clickada
   clickedID = ev.currentTarget.id;
